@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from BuscaNP import buscaNP
+from BuscaP import buscaP
 import F_auxiliares as fa
 
 ARQUIVO = "mapa1.txt"
@@ -27,11 +28,13 @@ frame_ctrl.grid(row=0, column=0, sticky="ns")
 
 tk.Label(frame_ctrl, text="Método:", font=("Arial", 10, "bold")).grid(row=0, column=0, sticky="w")
 metodo_var = tk.StringVar(value="Amplitude")
-ttk.Combobox(frame_ctrl, textvariable=metodo_var, state="readonly", width=20,
-             values=["Amplitude", "Profundidade", "Prof. Limitada"]).grid(
+ttk.Combobox(frame_ctrl, textvariable=metodo_var, state="readonly", width=22,
+             values=["Amplitude", "Profundidade", "Prof. Limitada",
+                     "Aprofund. Iterativo", "Bidirecional",
+                     "Custo Uniforme", "Greedy", "A*", "AIA*"]).grid(
              row=1, column=0, sticky="w", pady=(0, 10))
 
-tk.Label(frame_ctrl, text="Limite (Prof. Limitada):", font=("Arial", 10, "bold")).grid(row=2, column=0, sticky="w")
+tk.Label(frame_ctrl, text="Limite (Prof. Limitada / AI):", font=("Arial", 10, "bold")).grid(row=2, column=0, sticky="w")
 limite_var = tk.IntVar(value=5)
 tk.Spinbox(frame_ctrl, from_=1, to=100, textvariable=limite_var, width=6).grid(
     row=3, column=0, sticky="w", pady=(0, 10))
@@ -58,20 +61,45 @@ def executar():
     if mapa[destino[0]][destino[1]] != 0:
         messagebox.showerror("Erro", "Destino está sobre um obstáculo."); return
 
-    sol = buscaNP()
-    if metodo == "Amplitude":
-        caminho = sol.amplitude(origem, destino, nx, ny, mapa)
-    elif metodo == "Profundidade":
-        caminho = sol.profundidade(origem, destino, nx, ny, mapa)
-    elif metodo == "Prof. Limitada":
-        caminho = sol.prof_limitada(origem, destino, nx, ny, mapa, limite_var.get())
+    caminho = None
+    custo   = None
+
+    # Métodos sem peso
+    if metodo in ("Amplitude", "Profundidade", "Prof. Limitada",
+                  "Aprofund. Iterativo", "Bidirecional"):
+        sol = buscaNP()
+        if metodo == "Amplitude":
+            caminho = sol.amplitude_grid(origem, destino, nx, ny, mapa)
+        elif metodo == "Profundidade":
+            caminho = sol.profundidade_grid(origem, destino, nx, ny, mapa)
+        elif metodo == "Prof. Limitada":
+            caminho = sol.prof_limitada_grid(origem, destino, nx, ny, mapa, limite_var.get())
+        elif metodo == "Aprofund. Iterativo":
+            caminho = sol.aprof_iterativo_grid(origem, destino, nx, ny, mapa, limite_var.get())
+        elif metodo == "Bidirecional":
+            caminho = sol.bidirecional_grid(origem, destino, nx, ny, mapa)
+
+    # Métodos com peso
+    else:
+        sol = buscaP()
+        if metodo == "Custo Uniforme":
+            caminho, custo = sol.custo_uniforme_grid(origem, destino, mapa, nx, ny)
+        elif metodo == "Greedy":
+            caminho, custo = sol.greedy_grid(origem, destino, mapa, nx, ny)
+        elif metodo == "A*":
+            caminho, custo = sol.a_estrela_grid(origem, destino, mapa, nx, ny)
+        elif metodo == "AIA*":
+            caminho, custo = sol.aia_estrela_grid(origem, destino, mapa, nx, ny)
 
     txt.config(state="normal")
     txt.delete("1.0", tk.END)
     if caminho:
         txt.insert(tk.END, f"Método: {metodo}\n")
         txt.insert(tk.END, f"Caminho: {caminho}\n")
-        txt.insert(tk.END, f"Custo: {len(caminho) - 1} passos")
+        if custo is not None:
+            txt.insert(tk.END, f"Custo: {custo}")
+        else:
+            txt.insert(tk.END, f"Custo: {len(caminho) - 1} passos")
         desenhar_grid(caminho, origem, destino)
     else:
         txt.insert(tk.END, "Caminho não encontrado.")
@@ -131,12 +159,10 @@ def desenhar_grid(caminho=[], origem=None, destino=None):
             canvas.create_rectangle(x1, y1, x1+CELL, y1+CELL,
                                     fill=cor, outline=CORES["border"])
 
-            # Texto das coordenadas
             cor_txt = "white" if cor in (CORES["wall"], CORES["start"], CORES["goal"]) else "#AAAAAA"
             canvas.create_text(x1+3, y1+3, text=f"{i},{j}",
                                anchor="nw", font=("Arial", 7), fill=cor_txt)
-            
-            # Texto de origem e destino
+
             if pos == origem:
                 canvas.create_text(x1+CELL//2, y1+CELL//2,
                                    text="S", font=("Arial", 14, "bold"), fill="white")
