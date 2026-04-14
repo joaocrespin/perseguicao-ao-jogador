@@ -16,7 +16,19 @@ Um inimigo precisa encontrar o caminho ótimo até o jogador, desviando de obst�
 ```
 ## Algoritmos implementados
 
+**Sem peso**
 - Busca em Amplitude (BFS)
 - Busca em Profundidade (DFS)
 - Profundidade Limitada
-- A* *(em desenvolvimento)*
+- Aprofundamento Iterativo
+- Bidirecional
+
+**Com peso**
+- Custo Uniforme
+- Greedy
+- A*
+- AIA*
+  
+## Base de código
+
+As implementações dos algoritmos de busca (`BuscaNP.py`, `BuscaP.py` e estruturas de nó) foram disponibilizadas pelo professor como material de apoio da disciplina. A interface gráfica e a integração com o problema de perseguição foram desenvolvidas pelos integrantes.
