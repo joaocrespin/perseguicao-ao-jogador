@@ -21,6 +21,8 @@ mapa, nx, ny = fa.Gera_Problema_Grid_Fixo(ARQUIVO)
 root = tk.Tk()
 root.title("Perseguição ao Jogador - Inteligência Artificial")
 root.resizable(False, False)
+player_img = tk.PhotoImage(file="amigo.png")
+enemy_img = tk.PhotoImage(file="inimigo.png")
 
 # Opções
 frame_ctrl = tk.Frame(root, padx=10, pady=10)
@@ -164,11 +166,18 @@ def desenhar_grid(caminho=[], origem=None, destino=None):
                                anchor="nw", font=("Arial", 7), fill=cor_txt)
 
             if pos == origem:
-                canvas.create_text(x1+CELL//2, y1+CELL//2,
-                                   text="S", font=("Arial", 14, "bold"), fill="white")
+                canvas.create_image(
+                    x1 + CELL//2,
+                    y1 + CELL//2,
+                    image=enemy_img
+                )
+
             elif pos == destino:
-                canvas.create_text(x1+CELL//2, y1+CELL//2,
-                                   text="G", font=("Arial", 14, "bold"), fill="white")
+                canvas.create_image(
+                    x1 + CELL//2,
+                    y1 + CELL//2,
+                    image=player_img
+                )
 
 desenhar_grid()
 root.mainloop()
