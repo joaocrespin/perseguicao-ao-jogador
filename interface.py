@@ -135,6 +135,10 @@ def executar():
         elif metodo == "AIA*":
             caminho, custo = sol.aia_estrela_grid(origem, destino, mapa, nx, ny)
 
+        # Fix pro caminho aparecer invertido na aba resultado na busca c/ pesos
+        if caminho:
+            caminho = caminho[::-1]
+
     txt_resultado.config(state="normal")
     txt_resultado.delete("1.0", tk.END)
     if caminho:
