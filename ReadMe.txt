@@ -1,9 +1,9 @@
 ================================================
- PERSEGUIÇÃO AO JOGADOR — INTELIGÊNCIA ARTIFICIAL
+ PERSEGUIÇÃO AO JOGADOR - INTELIGÊNCIA ARTIFICIAL
 ================================================
 
 Trabalho prático da disciplina de Inteligência Artificial
-Faculdade de Tecnologia de Cruzeiro — 6º ADS
+Faculdade de Tecnologia de Cruzeiro - 6º ADS
 
 
 ------------------------------------------------
@@ -42,18 +42,21 @@ Para desativar o ambiente virtual quando terminar:
 
 
 ------------------------------------------------
- ARQUIVOS DO PROJETO
+ ESTRUTURA DE PASTAS
 ------------------------------------------------
 
-interface.py              — Interface gráfica principal
-BuscaNP.py                — Algoritmos de busca sem peso
-BuscaP.py                 — Algoritmos de busca com peso
-Node.py                   — Estrutura do nó
-NodeP.py                  — Estrutura do nó com peso
-F_auxiliares.py           — Funções auxiliares
-mapa1.txt                 — Mapa do grid 10x10
-principalBuscaSemPesos.py — Script de terminal (sem pesos)
-principalBuscaComPesos.py — Script de terminal (com pesos)
+  /
+  ├── interface.py
+  ├── BuscaNP.py
+  ├── BuscaP.py
+  ├── Node.py
+  ├── NodeP.py
+  ├── F_auxiliares.py
+  ├── data/
+  │   └── mapa.txt
+  └── assets/
+      ├── link.png
+      └── octorok.png
 
 
 ------------------------------------------------
@@ -61,35 +64,50 @@ principalBuscaComPesos.py — Script de terminal (com pesos)
 ------------------------------------------------
 
 1. MÉTODO: selecione o algoritmo de busca desejado
-   no menu suspenso.
+   no menu suspenso. Opções disponíveis:
+   Amplitude, Profundidade, Prof. Limitada,
+   Aprofund. Iterativo, Bidirecional,
+   Custo Uniforme, Greedy, A*, AIA*
 
 2. LIMITE: usado apenas pelos métodos "Prof. Limitada"
    e "Aprofund. Iterativo". Define a profundidade máxima
    da busca.
 
-3. ORIGEM: coordenadas (linha, coluna) do inimigo (S).
+3. ORIGEM: coordenadas (linha, coluna) do inimigo.
+   Representa o estado inicial da busca.
 
-4. DESTINO: coordenadas (linha, coluna) do jogador (G).
+4. DESTINO: coordenadas (linha, coluna) do herói.
+   Representa o estado objetivo da busca.
 
-5. Clique em "Executar" para iniciar a busca.
+5. Clique em "INICIAR BUSCA" para executar.
 
-6. O caminho encontrado será exibido em amarelo no mapa
-   e detalhado na área de resultado com o custo total.
+6. O caminho encontrado será exibido como trilha
+   dourada no mapa. A área de resultado mostra o
+   método utilizado, número de passos e custo total.
+   Para caminhos longos, pode ser necessário rolar
+   a área de resultado para visualizar o trajeto
+   completo.
 
 
 ------------------------------------------------
- FORMATO DO MAPA (mapa1.txt)
+ FORMATO DO MAPA (data/mapa.txt)
 ------------------------------------------------
 
-O mapa é um grid 10x10 onde:
+O mapa é um grid 15x15 onde:
   0 = célula livre
-  9 = obstáculo
+  9 = obstáculo (rocha)
 
 Os valores de cada linha são separados por vírgula.
 Exemplo:
-  0,0,0,0,0,0,0,0,0,0
-  0,0,0,9,0,0,0,0,0,0
+  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+  0,0,0,9,0,0,0,0,0,0,0,0,0,9,0
   ...
+
+O mapa pode ser modificado editando o arquivo
+data/mapa.txt. Para alterar o tamanho do grid,
+basta adicionar ou remover linhas e colunas,
+mantendo sempre o mesmo número de colunas
+por linha e os valores separados por vírgula.
 
 
 ------------------------------------------------
