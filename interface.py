@@ -45,7 +45,7 @@ fonte       = ("Consolas", 10, "bold")
 fonte_title = ("Consolas", 13, "bold")
 
 # Título
-tk.Label(frame_ctrl, text="Perseguição",
+tk.Label(frame_ctrl, text="Perseguição em Hyrule",
          font=fonte_title, bg=CORES["panel"], fg=CORES["accent"]).grid(
          row=0, column=0, sticky="w", pady=(0, 2))
 tk.Label(frame_ctrl, text="Encontre o caminho do mal ao Herói",
